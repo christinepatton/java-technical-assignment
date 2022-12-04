@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 // Buy One Get One Free discount
-public class BOGOFDiscount {
+public class BOGOFDiscount implements Discount {
 
-    private Set<Item> appliesTo;
+    private final Set<Item> appliesTo;
 
     public BOGOFDiscount(final Set<Item> appliesTo) {
         this.appliesTo = appliesTo;
