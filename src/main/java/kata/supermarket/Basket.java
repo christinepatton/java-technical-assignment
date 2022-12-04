@@ -55,7 +55,10 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts() {
-            return BigDecimal.ZERO;
+            return discounts.stream().map(discount -> discount.calculateDiscount(this.items))
+                    .reduce(BigDecimal::add)
+                    .orElse(BigDecimal.ZERO)
+                    .setScale(2, RoundingMode.HALF_UP);
         }
 
         private BigDecimal calculate() {

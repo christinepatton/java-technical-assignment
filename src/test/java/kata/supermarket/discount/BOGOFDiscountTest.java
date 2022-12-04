@@ -7,10 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,9 +43,7 @@ public class BOGOFDiscountTest {
         Item weighedItem1 = productByWeight.weighing(BigDecimal.ONE);
         Item weighedItem2 = productByWeight.weighing(BigDecimal.ONE);
 
-        List<Item> items = new ArrayList<>();
-        items.add(weighedItem1);
-        items.add(weighedItem2);
+        List<Item> items = Arrays.asList(weighedItem1, weighedItem2);
 
         assertEquals(BigDecimal.ZERO, discount.calculateDiscount(items));
     }
@@ -58,9 +53,7 @@ public class BOGOFDiscountTest {
         Item matchingItem1 = productByUnit.oneOf();
         Item matchingItem2 = productByUnit.oneOf();
 
-        List<Item> items = new ArrayList<>();
-        items.add(matchingItem1);
-        items.add(matchingItem2);
+        List<Item> items = Arrays.asList(matchingItem1, matchingItem2);
 
         assertEquals(BigDecimal.ONE, discount.calculateDiscount(items));
     }
@@ -71,10 +64,7 @@ public class BOGOFDiscountTest {
         Item matchingItem2 = productByUnit.oneOf();
         Item matchingItem3 = productByUnit.oneOf();
 
-        List<Item> items = new ArrayList<>();
-        items.add(matchingItem1);
-        items.add(matchingItem2);
-        items.add(matchingItem3);
+        List<Item> items = Arrays.asList(matchingItem1, matchingItem2, matchingItem3);
 
         assertEquals(BigDecimal.ONE, discount.calculateDiscount(items));
     }

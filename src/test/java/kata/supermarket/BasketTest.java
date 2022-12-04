@@ -1,5 +1,6 @@
 package kata.supermarket;
 
+import kata.supermarket.discount.BOGOFDiscount;
 import kata.supermarket.discount.Discount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,9 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +31,8 @@ class BasketTest {
                 aSingleItemPricedPerUnit(),
                 multipleItemsPricedPerUnit(),
                 aSingleItemPricedByWeight(),
-                multipleItemsPricedByWeight()
+                multipleItemsPricedByWeight(),
+                multipleItemsPricedPerUnitWithBOGOFDiscount()
         );
     }
 
@@ -52,6 +52,14 @@ class BasketTest {
                 Arrays.asList(aPackOfDigestives(), aPintOfMilk()),
                 Collections.emptyList());
     }
+
+    private static Arguments multipleItemsPricedPerUnitWithBOGOFDiscount() {
+        Product digestives = new Product(new BigDecimal("1.55"));
+        return Arguments.of("multiple identical items priced per unit with BOGOF", "1.55",
+                Arrays.asList(digestives.oneOf(), digestives.oneOf()),
+                Arrays.asList(bogofOnDigestives(digestives)));
+    }
+
 
     private static Arguments aSingleItemPricedPerUnit() {
         return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()), Collections.emptyList());
@@ -83,5 +91,11 @@ class BasketTest {
 
     private static Item twoHundredGramsOfPickAndMix() {
         return aKiloOfPickAndMix().weighing(new BigDecimal(".2"));
+    }
+
+    private static Discount bogofOnDigestives(final Product theDigestives) {
+        Set<Item> appliesTo = new HashSet<>();
+        appliesTo.add(theDigestives.oneOf());
+        return new BOGOFDiscount(appliesTo);
     }
 }
