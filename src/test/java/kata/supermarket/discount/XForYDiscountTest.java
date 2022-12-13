@@ -5,18 +5,19 @@ import kata.supermarket.Product;
 import kata.supermarket.WeighedProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BOGOFDiscountTest {
+public class XForYDiscountTest {
 
     private Set<Item> itemsToDiscount;
     private Product productByUnit;
     private WeighedProduct productByWeight;
-    private BOGOFDiscount discount;
+    private XForYDiscount discount;
 
     @BeforeEach
     void setUp() {
@@ -30,7 +31,7 @@ public class BOGOFDiscountTest {
         // over this product.
         itemsToDiscount.add(productByWeight.weighing(BigDecimal.TEN));
 
-        discount = new BOGOFDiscount(itemsToDiscount);
+        discount = new XForYDiscount(itemsToDiscount, 2, 1);
     }
 
     @Test
@@ -60,6 +61,19 @@ public class BOGOFDiscountTest {
 
     @Test
     void testBasketWithThreeApplicableItemsReturnsCorrectDiscount() {
+        Item matchingItem1 = productByUnit.oneOf();
+        Item matchingItem2 = productByUnit.oneOf();
+        Item matchingItem3 = productByUnit.oneOf();
+
+        List<Item> items = Arrays.asList(matchingItem1, matchingItem2, matchingItem3);
+
+        assertEquals(BigDecimal.ONE, discount.calculateDiscount(items));
+    }
+
+    @Test
+    void testThreeForTwoAppliesWithThreeItems() {
+        discount = new XForYDiscount(itemsToDiscount, 3, 2);
+
         Item matchingItem1 = productByUnit.oneOf();
         Item matchingItem2 = productByUnit.oneOf();
         Item matchingItem3 = productByUnit.oneOf();
