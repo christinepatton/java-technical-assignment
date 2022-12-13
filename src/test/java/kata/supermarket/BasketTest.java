@@ -1,5 +1,6 @@
 package kata.supermarket;
 
+import kata.supermarket.discount.TwoForAPoundDiscount;
 import kata.supermarket.discount.XForYDiscount;
 import kata.supermarket.discount.Discount;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,8 @@ class BasketTest {
                 aSingleItemPricedByWeight(),
                 multipleItemsPricedByWeight(),
                 multipleItemsPricedPerUnitWithBOGOFDiscount(),
-                multipleItemsPricedPerUnitWithThreeForTwoDiscount()
+                multipleItemsPricedPerUnitWithThreeForTwoDiscount(),
+                multipleItemsPricedPerUnitWithTwoForAPound()
         );
     }
 
@@ -66,6 +68,13 @@ class BasketTest {
         return Arguments.of("multiple identical items priced per unit with 3 for 2", "3.10",
                 Arrays.asList(digestives.oneOf(), digestives.oneOf(), digestives.oneOf()),
                 Arrays.asList(threeForTwoOnDigestives(digestives)));
+    }
+
+    private static Arguments multipleItemsPricedPerUnitWithTwoForAPound() {
+        Product digestives = new Product(new BigDecimal("1.55"));
+        return Arguments.of("multiple identical items priced per unit with two for a pound", "1.00",
+                Arrays.asList(digestives.oneOf(), digestives.oneOf()),
+                Arrays.asList(twoForAPoundOnDigestives(digestives)));
     }
 
 
@@ -112,5 +121,11 @@ class BasketTest {
         Set<Item> appliesTo = new HashSet<>();
         appliesTo.add(theDigestives.oneOf());
         return new XForYDiscount(appliesTo, 3, 2);
+    }
+
+    private static Discount twoForAPoundOnDigestives(final Product theDigestives) {
+        Set<Item> appliesTo = new HashSet<>();
+        appliesTo.add(theDigestives.oneOf());
+        return new TwoForAPoundDiscount(appliesTo);
     }
 }
